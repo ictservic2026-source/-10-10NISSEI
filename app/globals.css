@@ -1,5 +1,9 @@
 
-:root{--bg:#050d24;--bg2:#0a2358;--panel:rgba(255,255,255,.06);--ink:#f5f1e6;--mut:#a4abc8;--line:rgba(90,169,255,.22);--gold:#5aa9ff;--gold2:#d6ebff;--hot:#ff3d5a;--ok:#35d49a;--disp:"Bodoni Moda","Noto Serif Thai",serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{
+/* === พื้นหลังหน้าปก: ใส่ Art แล้วเปิดสองบรรทัดนี้ (ดูวิธีใน README) ===
+   --hero-art:url("/hero-bg.jpg") center/cover no-repeat;
+   --hero-overlay:linear-gradient(90deg,rgba(5,13,36,.72),rgba(5,13,36,.1)); */
+--hero-art:none;--hero-overlay:none;--bg:#050d24;--bg2:#0a2358;--panel:rgba(255,255,255,.06);--ink:#f5f1e6;--mut:#a4abc8;--line:rgba(90,169,255,.22);--gold:#5aa9ff;--gold2:#d6ebff;--hot:#ff3d5a;--ok:#35d49a;--disp:"Bodoni Moda","Noto Serif Thai",serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef0f7;--bg2:#fff;--panel:#fff;--ink:#10162e;--mut:#5a6385;--line:rgba(12,77,162,.25);--gold:#0c4da2;--gold2:#083a7d}}
 :root[data-theme="light"]{--bg:#eef0f7;--bg2:#fff;--panel:#fff;--ink:#10162e;--mut:#5a6385;--line:rgba(12,77,162,.25);--gold:#0c4da2;--gold2:#083a7d}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -10,7 +14,7 @@ nav{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 nav .tabs{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:99px;padding:3px;background:var(--panel)}
 nav button{border:0;background:none;color:var(--mut);padding:8px 18px;border-radius:99px;font:600 14px "Noto Sans Thai";cursor:pointer}
 nav button.on{background:linear-gradient(135deg,#3b8ff0,#0c4da2);color:#fff}
-.hero{position:relative;overflow:hidden;border-radius:28px;border:1px solid var(--line);padding:34px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center;background:linear-gradient(145deg,#0a2a66,#050d24 70%);color:#f5f1e6;box-shadow:0 30px 80px -30px rgba(90,169,255,.35)}
+.hero{position:relative;overflow:hidden;border-radius:28px;border:1px solid var(--line);padding:34px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center;background:var(--hero-overlay),var(--hero-art),linear-gradient(145deg,#0a2a66,#050d24 70%);color:#f5f1e6;box-shadow:0 30px 80px -30px rgba(90,169,255,.35)}
 .hero:before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 0deg,transparent,rgba(90,169,255,.18),transparent 30%);animation:spin 14s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .hero>*{position:relative}
