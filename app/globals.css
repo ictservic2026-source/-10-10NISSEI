@@ -3,8 +3,8 @@
 /* === พื้นหลังหน้าปก: ใส่ Art แล้วเปิดสองบรรทัดนี้ (ดูวิธีใน README) ===
    --hero-art:url("/hero-bg.jpg") center/cover no-repeat;
    --hero-overlay:linear-gradient(90deg,rgba(5,13,36,.72),rgba(5,13,36,.1)); */
-   --hero-art:url("/hero-bg.jpg") center/cover no-repeat;
-   --hero-overlay:linear-gradient(90deg,rgba(5,13,36,.72),rgba(5,13,36,.1));--ink:#f5f1e6;--mut:#a4abc8;--line:rgba(90,169,255,.22);--gold:#5aa9ff;--gold2:#d6ebff;--hot:#ff3d5a;--ok:#35d49a;--disp:"Bodoni Moda","Noto Serif Thai",serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+      --hero-art:url("/hero-bg.jpg") center/cover no-repeat;
+   --hero-overlay:linear-gradient(90deg,rgba(5,13,36,.72),rgba(5,13,36,.1));--bg:#050d24;--bg2:#0a2358;--panel:rgba(255,255,255,.06);--ink:#f5f1e6;--mut:#a4abc8;--line:rgba(90,169,255,.22);--gold:#5aa9ff;--gold2:#d6ebff;--hot:#ff3d5a;--ok:#35d49a;--disp:"Bodoni Moda","Noto Serif Thai",serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef0f7;--bg2:#fff;--panel:#fff;--ink:#10162e;--mut:#5a6385;--line:rgba(12,77,162,.25);--gold:#0c4da2;--gold2:#083a7d}}
 :root[data-theme="light"]{--bg:#eef0f7;--bg2:#fff;--panel:#fff;--ink:#10162e;--mut:#5a6385;--line:rgba(12,77,162,.25);--gold:#0c4da2;--gold2:#083a7d}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
