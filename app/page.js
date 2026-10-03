@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseBrowser'
-import Shirt from './shirt'
 
 const SIZES = ['SS', 'S', 'M', 'L', 'XL']
 const ERR = { SOLD_OUT: 'ไซส์นี้หมดแล้ว ลองไซส์อื่น', ALREADY_ORDERED: 'รหัสพนักงานนี้สั่งซื้อไปแล้ว', INVALID_CODE: 'รหัสพนักงานต้องมี 6 ตัว', NOT_OPEN: 'ยังไม่ถึงเวลาเปิดขาย' }
@@ -61,14 +60,14 @@ export default function Shop() {
     <div className="hero">
       <div>
         <img src="/logo.png" className="hl" alt="NISSEI" />
-        <h1>เสื้อ Limited Edition<br />เฉพาะพนักงาน</h1>
+        <h1>NISSEI 40TH<br />ANNIVERSARY JACKET</h1>
         <p>เปิดขาย 10:10 น. · มีเพียง {total || '-'} ตัวเท่านั้น · 1 รหัสพนักงาน ซื้อได้ 1 ตัว</p>
         {!open && <div className="cd"><div><b>{p2(Math.floor(s / 3600))}</b><small>ชั่วโมง</small></div><i>:</i><div><b>{p2(Math.floor(s % 3600 / 60))}</b><small>นาที</small></div><i>:</i><div><b>{p2(s % 60)}</b><small>วินาที</small></div></div>}
         <span className="live">{open ? <b style={{ color: '#35d49a' }}>● กำลังเปิดขาย</b> : 'รอเปิดขาย'}</span>
         <div className="prog"><i style={{ width: total ? (total - left) / total * 100 + '%' : 0 }} /></div>
         <small style={{ color: '#a4abc8' }}>ขายไปแล้ว {total - left} จาก {total} ตัว · เหลือ {left}</small>
       </div>
-      <div className="shirt"><Shirt /></div>
+      <div className="shirt"><img src="/jacket.png" alt="NISSEI 40th Anniversary Jacket" className="jk" /></div>
     </div>
     <h2>เลือกไซส์ของคุณ</h2>
     <div className="sizes">{SIZES.map((k) => { const l = stock[k]?.remaining ?? 0, t = stock[k]?.total || 1, low = l > 0 && l <= 5

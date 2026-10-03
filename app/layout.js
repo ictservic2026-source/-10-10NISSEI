@@ -1,5 +1,5 @@
 import './globals.css'
-export const metadata = { title: 'NISSEI 10:10 Staff Drop', description: 'เสื้อพนักงาน Limited Edition' }
+export const metadata = { title: 'NISSEI 40TH ANNIVERSARY JACKET', description: 'แจ็คเก็ตพนักงาน Limited Edition' }
 export default function Layout({ children }) {
   return (<html lang="th"><head>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
