@@ -1,8 +1,28 @@
+import { Kanit, IBM_Plex_Sans_Thai } from 'next/font/google'
 import './globals.css'
-export const metadata = { title: 'NISSEI 40TH ANNIVERSARY JACKET', description: 'แจ็คเก็ตพนักงาน Limited Edition' }
+
+const display = Kanit({ subsets: ['thai', 'latin'], weight: ['500', '600', '700', '800'], variable: '--font-display', display: 'swap' })
+const body = IBM_Plex_Sans_Thai({ subsets: ['thai', 'latin'], weight: ['400', '500', '600', '700'], variable: '--font-body', display: 'swap' })
+
+export const metadata = {
+  title: 'NISSEI 40th Anniversary Jacket · 10:10 Staff Drop',
+  description: 'แจ็คเก็ตพนักงาน NISSEI ครบรอบ 40 ปี Limited Edition — เปิดขาย 10:10 น. จำนวนจำกัด 1 รหัสพนักงาน ต่อ 1 ตัว',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f7ff' },
+    { media: '(prefers-color-scheme: dark)', color: '#070d24' },
+  ],
+}
+
 export default function Layout({ children }) {
-  return (<html lang="th"><head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@500;700;900&family=Noto+Sans+Thai:wght@400;600;800&display=swap" rel="stylesheet" />
-  </head><body>{children}</body></html>)
+  return (
+    <html lang="th" className={`${display.variable} ${body.variable}`}>
+      <body>{children}</body>
+    </html>
+  )
 }

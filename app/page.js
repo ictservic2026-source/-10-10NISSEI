@@ -1,11 +1,15 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseBrowser'
+import SiteHeader from '../components/site-header'
+import Hero from '../components/hero'
+import SizePicker from '../components/size-picker'
+import { EmployeeForm, OrderSummary } from '../components/checkout'
+import SuccessModal from '../components/success-modal'
 
 const SIZES = ['SS', 'S', 'M', 'L', 'XL']
 const ERR = { SOLD_OUT: 'ไซส์นี้หมดแล้ว ลองไซส์อื่น', ALREADY_ORDERED: 'รหัสพนักงานนี้สั่งซื้อไปแล้ว', INVALID_CODE: 'รหัสพนักงานต้องมี 6 ตัว', NOT_OPEN: 'ยังไม่ถึงเวลาเปิดขาย' }
 const OPEN = process.env.NEXT_PUBLIC_OPEN_AT ? new Date(process.env.NEXT_PUBLIC_OPEN_AT).getTime() : 0
-const p2 = (n) => String(n).padStart(2, '0')
 
 export default function Shop() {
   const [stock, setStock] = useState({})
@@ -36,10 +40,11 @@ export default function Shop() {
   useEffect(() => { if (sel && (stock[sel]?.remaining ?? 1) < 1) setSel(null) }, [stock, sel])
 
   const open = now >= OPEN
-  const s = Math.max(0, Math.ceil((OPEN - now) / 1000))
+  const seconds = Math.max(0, Math.ceil((OPEN - now) / 1000))
   const total = SIZES.reduce((a, k) => a + (stock[k]?.total || 0), 0)
   const left = SIZES.reduce((a, k) => a + (stock[k]?.remaining || 0), 0)
-  const price = stock[sel]?.price
+  const basePrice = SIZES.map((k) => stock[k]?.price).find((p) => p > 0)
+  const price = sel ? stock[sel]?.price : basePrice
   const canBuy = open && sel && !busy
 
   async function buy() {
@@ -55,37 +60,21 @@ export default function Shop() {
   }
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value })
 
-  return (<div className="wrap">
-    <nav><div className="lg"><img src="/logo.png" alt="NISSEI" /><span className="logo">10:10 STAFF DROP</span></div></nav>
-    <div className="hero">
-      <div>
-        <img src="/logo.png" className="hl" alt="NISSEI" />
-        <h1>NISSEI 40TH<br />ANNIVERSARY JACKET</h1>
-        <p>เปิดขาย 10:10 น. · มีเพียง {total || '-'} ตัวเท่านั้น · 1 รหัสพนักงาน ซื้อได้ 1 ตัว</p>
-        {!open && <div className="cd"><div><b>{p2(Math.floor(s / 3600))}</b><small>ชั่วโมง</small></div><i>:</i><div><b>{p2(Math.floor(s % 3600 / 60))}</b><small>นาที</small></div><i>:</i><div><b>{p2(s % 60)}</b><small>วินาที</small></div></div>}
-        <span className="live">{open ? <b style={{ color: '#35d49a' }}>● กำลังเปิดขาย</b> : 'รอเปิดขาย'}</span>
-        <div className="prog"><i style={{ width: total ? (total - left) / total * 100 + '%' : 0 }} /></div>
-        <small style={{ color: '#a4abc8' }}>ขายไปแล้ว {total - left} จาก {total} ตัว · เหลือ {left}</small>
-      </div>
-      <div className="shirt"><img src="/jacket.png" alt="NISSEI 40th Anniversary Jacket" className="jk" /></div>
+  return (
+    <div className="wrap">
+      <SiteHeader open={open} />
+      <main>
+        <Hero open={open} seconds={seconds} total={total} left={left} price={basePrice} />
+        <div className="checkout">
+          <div className="checkout-main">
+            <SizePicker sizes={SIZES} stock={stock} selected={sel} onSelect={setSel} open={open} flash={flash} />
+            <EmployeeForm form={f} onChange={set} />
+          </div>
+          <OrderSummary size={sel} price={price} canBuy={canBuy} busy={busy} onBuy={buy} msg={msg} />
+        </div>
+      </main>
+      <footer className="site-footer">NISSEI · 40 Years Together · Staff Edition</footer>
+      {done && <SuccessModal order={done} onClose={() => setDone(null)} />}
     </div>
-    <h2>เลือกไซส์ของคุณ</h2>
-    <div className="sizes">{SIZES.map((k) => { const l = stock[k]?.remaining ?? 0, t = stock[k]?.total || 1, low = l > 0 && l <= 5
-      return (<button key={k} className={`sz ${sel === k ? 'sel' : ''} ${low ? 'low' : ''} ${flash === k ? 'flash' : ''}`} disabled={l < 1 || !open} onClick={() => setSel(k)}>
-        <div className="ring" style={{ '--p': l / t * 100 }}><b>{k}</b></div>
-        <div className="l">{l < 1 ? 'หมดแล้ว' : low ? `เหลือ ${l} ตัวสุดท้าย!` : `เหลือ ${l} ตัว`}</div></button>) })}</div>
-    <h2>ยืนยันการสั่งซื้อ</h2>
-    <div className="form">
-      <div><label>ชื่อ-นามสกุล</label><input value={f.name} onChange={set('name')} placeholder="สมชาย ใจดี" /></div>
-      <div><label>รหัสพนักงาน (6 ตัว)</label><input value={f.code} onChange={set('code')} maxLength={6} placeholder="684251" /></div>
-      <div><label>แผนก / หน่วยงาน</label><input value={f.dept} onChange={set('dept')} placeholder="พิมพ์เองได้ เช่น ผลิต, QA, บัญชี" /></div>
-      <div className="buy"><div>ไซส์ <b>{sel || '-'}</b><div className="tot">{price > 0 ? '฿' + Number(price).toLocaleString() : 'ราคาแจ้งภายหลัง'}</div></div>
-        <button className="go" disabled={!canBuy} onClick={buy}>{busy ? 'กำลังสั่งซื้อ...' : 'สั่งซื้อเลย'}</button></div>
-      <div className="msg err">{msg}</div>
-    </div>
-    {done && <div className="modal"><div className="tkt"><div style={{ fontSize: 42 }}>🎉</div><h3>สั่งซื้อสำเร็จ</h3>
-      <div style={{ color: '#a4abc8' }}>เลขที่ออเดอร์ #{String(done.id).padStart(4, '0')}</div>
-      <dl><dt>ชื่อ</dt><dd>{done.name}</dd><dt>รหัส / แผนก</dt><dd>{done.code.toUpperCase()} · {done.dept}</dd><dt>ไซส์</dt><dd>{done.size} × 1</dd></dl>
-      <button className="go" style={{ padding: '12px 36px' }} onClick={() => setDone(null)}>ตกลง</button></div></div>}
-  </div>)
+  )
 }
