@@ -2,10 +2,10 @@ export default function SizePicker({ sizes, stock, selected, onSelect, open, fla
   return (
     <section className="panel" aria-labelledby="size-title">
       <div className="panel-head">
-        <span className="step">01</span>
+        <span className="step">1</span>
         <div>
-          <h2 id="size-title">เลือกไซส์ของคุณ</h2>
-          <p>สต๊อกอัปเดตแบบเรียลไทม์</p>
+          <h2 id="size-title">เลือกไซส์</h2>
+          <p>จำนวนคงเหลืออัปเดตแบบเรียลไทม์</p>
         </div>
       </div>
       <div className="sizes" role="radiogroup" aria-label="ไซส์">
@@ -23,20 +23,21 @@ export default function SizePicker({ sizes, stock, selected, onSelect, open, fla
               type="button"
               role="radio"
               aria-checked={selected === k}
+              aria-label={`ไซส์ ${k} ${soldOut ? 'หมดแล้ว' : `เหลือ ${l} ตัว`}`}
               className={cls}
               disabled={soldOut || !open}
               onClick={() => onSelect(k)}
             >
               <span className="size-label">{k}</span>
+              <span className="size-left">{soldOut ? 'หมด' : `เหลือ ${l}`}</span>
               <span className="size-bar" aria-hidden="true">
                 <i style={{ width: (l / t) * 100 + '%' }} />
               </span>
-              <span className="size-left">{soldOut ? 'หมดแล้ว' : low ? `เหลือ ${l} ตัวสุดท้าย` : `เหลือ ${l} ตัว`}</span>
             </button>
           )
         })}
       </div>
-      {!open && <p className="hint">ปุ่มเลือกไซส์จะเปิดให้กดเมื่อถึงเวลา 10:10 น.</p>}
+      {!open && <p className="hint">ปุ่มเลือกไซส์จะกดได้เมื่อถึงเวลา 10:10 น.</p>}
     </section>
   )
 }

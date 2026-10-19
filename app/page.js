@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabaseBrowser'
 import SiteHeader from '../components/site-header'
 import Hero from '../components/hero'
 import SizePicker from '../components/size-picker'
-import { EmployeeForm, OrderSummary } from '../components/checkout'
+import { EmployeeForm, OrderSummary, MobileBuyBar } from '../components/checkout'
 import SuccessModal from '../components/success-modal'
 
 const SIZES = ['SS', 'S', 'M', 'L', 'XL']
@@ -43,8 +43,8 @@ export default function Shop() {
   const seconds = Math.max(0, Math.ceil((OPEN - now) / 1000))
   const total = SIZES.reduce((a, k) => a + (stock[k]?.total || 0), 0)
   const left = SIZES.reduce((a, k) => a + (stock[k]?.remaining || 0), 0)
-  const basePrice = SIZES.map((k) => stock[k]?.price).find((p) => p > 0)
-  const price = sel ? stock[sel]?.price : basePrice
+  const basePrice = SIZES.map((k) => stock[k]?.price).find((p) => p > 0) || 250
+  const price = (sel && stock[sel]?.price) || basePrice
   const canBuy = open && sel && !busy
 
   async function buy() {
@@ -73,7 +73,8 @@ export default function Shop() {
           <OrderSummary size={sel} price={price} canBuy={canBuy} busy={busy} onBuy={buy} msg={msg} />
         </div>
       </main>
-      <footer className="site-footer">NISSEI · 40 Years Together · Staff Edition</footer>
+      <footer className="site-footer">NISSEI 40th Anniversary · จัดทำโดย แผนกสำนักประธาน</footer>
+      <MobileBuyBar size={sel} price={price} canBuy={canBuy} busy={busy} onBuy={buy} msg={msg} />
       {done && <SuccessModal order={done} onClose={() => setDone(null)} />}
     </div>
   )

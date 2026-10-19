@@ -8,18 +8,23 @@ function Countdown({ seconds }) {
   ]
   return (
     <div className="countdown" aria-label="เวลาก่อนเปิดขาย">
-      {parts.map(([v, label], i) => (
-        <div className="cd-group" key={label}>
-          {i > 0 && <span className="cd-sep" aria-hidden="true">:</span>}
-          <div className="cd-tile">
+      <span className="countdown-label">เปิดขายใน</span>
+      <div className="countdown-tiles">
+        {parts.map(([v, label]) => (
+          <div className="cd-tile" key={label}>
             <b>{p2(v)}</b>
             <small>{label}</small>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }
+
+const DETAILS = [
+  { src: '/detail-cuff.webp', label: 'ชายแขนติดกระดุมแปะ' },
+  { src: '/detail-hem.webp', label: 'ชายเสื้อทรงตรง ด้านหลังมีกระดุมแปะ' },
+]
 
 export default function Hero({ open, seconds, total, left, price }) {
   const sold = total - left
@@ -27,24 +32,33 @@ export default function Hero({ open, seconds, total, left, price }) {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero-copy">
-        <p className="eyebrow">
-          <span className="eyebrow-badge">40</span>
-          Anniversary · Limited Edition
-        </p>
+        <p className="eyebrow">NISSEI 40th Anniversary</p>
         <h1 id="hero-title">
-          NISSEI 40th
-          <span>Anniversary Jacket</span>
+          <span className="h1-en">Jacket</span>
+          <span className="h1-th">ราคาพิเศษ</span>
         </h1>
+
+        <div className="price-row">
+          <p className="price">
+            <b>{Number(price).toLocaleString()}</b>
+            <span>บาท</span>
+          </p>
+          <span className="limited">มีจำนวนจำกัด</span>
+        </div>
+
         <p className="hero-lead">
-          แจ็คเก็ตที่ระลึกครบรอบ 40 ปี สำหรับพนักงานเท่านั้น
-          มีเพียง <strong>{total || '-'} ตัว</strong> · 1 รหัสพนักงาน ซื้อได้ 1 ตัว
+          แจ็คเก็ตที่ระลึกครบรอบ 40 ปี สำหรับพนักงาน NISSEI
+          <br />
+          1 รหัสพนักงาน สั่งซื้อได้ 1 ตัว
         </p>
 
         {!open && <Countdown seconds={seconds} />}
 
         <div className="stock-meter">
           <div className="stock-meter-head">
-            <span>ขายไปแล้ว <strong>{sold}</strong> / {total} ตัว</span>
+            <span>
+              ขายแล้ว <strong>{sold}</strong> / {total} ตัว
+            </span>
             <span className="stock-left">เหลือ {left} ตัว</span>
           </div>
           <div className="meter" role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={sold} aria-label="ยอดขาย">
@@ -55,12 +69,23 @@ export default function Hero({ open, seconds, total, left, price }) {
 
       <div className="hero-product">
         <div className="product-stage">
-          <img src="/jacket.png" alt="แจ็คเก็ต NISSEI 40th Anniversary สีน้ำเงิน" className="jacket" />
+          <img
+            src="/jacket-main.webp"
+            alt="แจ็คเก็ต NISSEI ครบรอบ 40 ปี สีน้ำเงิน ซิปหน้า คอตั้ง"
+            width={710}
+            height={640}
+            className="jacket"
+            fetchPriority="high"
+          />
         </div>
-        <div className="price-tag">
-          <small>ราคาพนักงาน</small>
-          <b>{price > 0 ? '฿' + Number(price).toLocaleString() : 'แจ้งภายหลัง'}</b>
-        </div>
+        <ul className="details" aria-label="รายละเอียดเสื้อ">
+          {DETAILS.map((d) => (
+            <li key={d.src} className="detail">
+              <img src={d.src} alt="" width={278} height={196} loading="lazy" />
+              <span>{d.label}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )

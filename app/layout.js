@@ -13,10 +13,7 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f4f7ff' },
-    { media: '(prefers-color-scheme: dark)', color: '#070d24' },
-  ],
+  themeColor: '#1638c9',
 }
 
 export default function Layout({ children }) {

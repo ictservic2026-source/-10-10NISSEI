@@ -13,12 +13,16 @@ export default function SuccessModal({ order, onClose }) {
           <dt>ชื่อ</dt>
           <dd>{order.name}</dd>
           <dt>รหัส / แผนก</dt>
-          <dd>{order.code.toUpperCase()} · {order.dept}</dd>
+          <dd>
+            {order.code.toUpperCase()} · {order.dept}
+          </dd>
           <dt>ไซส์</dt>
           <dd>{order.size} × 1</dd>
         </dl>
         <p className="ticket-note">กรุณาแคปหน้าจอนี้เก็บไว้เป็นหลักฐาน</p>
-        <button type="button" className="btn-primary" onClick={onClose} autoFocus>ตกลง</button>
+        <button type="button" className="btn-primary" onClick={onClose} autoFocus>
+          ตกลง
+        </button>
       </div>
     </div>
   )

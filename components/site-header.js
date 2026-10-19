@@ -3,12 +3,11 @@ export default function SiteHeader({ open }) {
     <header className="topbar">
       <div className="brand">
         <img src="/logo.png" alt="NISSEI" className="brand-logo" />
-        <span className="brand-divider" aria-hidden="true" />
-        <span className="brand-name">10:10 Staff Drop</span>
+        <span className="brand-name">Staff Jacket</span>
       </div>
       <span className={`status-pill ${open ? 'is-open' : ''}`} role="status">
         <span className="status-dot" aria-hidden="true" />
-        {open ? 'กำลังเปิดขาย' : 'รอเปิดขาย 10:10 น.'}
+        {open ? 'เปิดขายแล้ว' : 'รอเปิดขาย 10:10 น.'}
       </span>
     </header>
   )
