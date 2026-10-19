@@ -1,4 +1,10 @@
+import { baht } from './checkout'
+
+const pad = (n) => '#' + String(n).padStart(4, '0')
+
 export default function SuccessModal({ order, onClose }) {
+  const ids = order.ids || []
+  const ref = ids.length > 1 ? `${pad(Math.min(...ids))} – ${pad(Math.max(...ids))}` : pad(ids[0] ?? 0)
   return (
     <div className="modal" role="dialog" aria-modal="true" aria-labelledby="ok-title">
       <div className="ticket">
@@ -8,7 +14,7 @@ export default function SuccessModal({ order, onClose }) {
           </svg>
         </div>
         <h3 id="ok-title">สั่งซื้อสำเร็จ</h3>
-        <p className="ticket-id">เลขที่ออเดอร์ #{String(order.id).padStart(4, '0')}</p>
+        <p className="ticket-id">เลขที่ออเดอร์ {ref}</p>
         <dl>
           <dt>ชื่อ</dt>
           <dd>{order.name}</dd>
@@ -16,8 +22,14 @@ export default function SuccessModal({ order, onClose }) {
           <dd>
             {order.code.toUpperCase()} · {order.dept}
           </dd>
-          <dt>ไซส์</dt>
-          <dd>{order.size} × 1</dd>
+          {order.items.map((it) => (
+            <div key={it.size} className="ticket-line">
+              <dt>ไซส์ {it.size}</dt>
+              <dd>× {it.qty}</dd>
+            </div>
+          ))}
+          <dt className="ticket-total">ยอดรวม</dt>
+          <dd className="ticket-total">{baht(order.total)}</dd>
         </dl>
         <p className="ticket-note">กรุณาแคปหน้าจอนี้เก็บไว้เป็นหลักฐาน</p>
         <button type="button" className="btn-primary" onClick={onClose} autoFocus>

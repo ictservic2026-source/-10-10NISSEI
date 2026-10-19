@@ -6,7 +6,7 @@ const body = IBM_Plex_Sans_Thai({ subsets: ['thai', 'latin'], weight: ['400', '5
 
 export const metadata = {
   title: 'NISSEI 40th Anniversary Jacket · 10:10 Staff Drop',
-  description: 'แจ็คเก็ตพนักงาน NISSEI ครบรอบ 40 ปี Limited Edition — เปิดขาย 10:10 น. จำนวนจำกัด 1 รหัสพนักงาน ต่อ 1 ตัว',
+  description: 'แจ็คเก็ตพนักงาน NISSEI ครบรอบ 40 ปี Limited Edition — เปิดขาย 10:10 น. สั่งซื้อได้หลายตัว หลายไซส์',
 }
 
 export const viewport = {

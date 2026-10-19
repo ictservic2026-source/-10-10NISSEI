@@ -1,4 +1,6 @@
-const baht = (p) => (p > 0 ? '฿' + Number(p).toLocaleString() : '-')
+import QtyStepper from './qty-stepper'
+
+export const baht = (p) => '฿' + Number(p || 0).toLocaleString()
 
 export function EmployeeForm({ form, onChange }) {
   return (
@@ -28,50 +30,116 @@ export function EmployeeForm({ form, onChange }) {
   )
 }
 
-function BuyButton({ canBuy, busy, onBuy }) {
+function Thumb() {
   return (
-    <button type="button" className="btn-primary" disabled={!canBuy} onClick={onBuy}>
-      {busy ? 'กำลังสั่งซื้อ...' : 'สั่งซื้อเลย'}
-    </button>
+    <div className="summary-thumb">
+      <img src="/jacket-main.webp" alt="" width={710} height={640} />
+    </div>
   )
 }
 
-export function OrderSummary({ size, price, canBuy, busy, onBuy, msg }) {
+export function CartSidebar({ items, count, sum, canNext, onNext }) {
   return (
     <aside className="summary" aria-labelledby="summary-title">
-      <h2 id="summary-title">สรุปคำสั่งซื้อ</h2>
-      <div className="summary-item">
-        <div className="summary-thumb">
-          <img src="/jacket-main.webp" alt="" width={710} height={640} />
-        </div>
-        <div>
-          <b>NISSEI 40th Jacket</b>
-          <span>ไซส์ {size || '-'} · 1 ตัว</span>
-        </div>
-      </div>
+      <h2 id="summary-title">ตะกร้าของคุณ</h2>
+      {items.length === 0 ? (
+        <p className="empty">ยังไม่ได้เลือกสินค้า</p>
+      ) : (
+        <ul className="mini-cart">
+          {items.map((it) => (
+            <li key={it.size}>
+              <span>ไซส์ {it.size} × {it.qty}</span>
+              <b>{baht(it.price * it.qty)}</b>
+            </li>
+          ))}
+        </ul>
+      )}
       <div className="summary-total">
-        <span>ยอดชำระ</span>
-        <b>{baht(price)}</b>
+        <span>รวม {count} ตัว</span>
+        <b>{baht(sum)}</b>
       </div>
-      <div className="summary-cta">
-        <BuyButton canBuy={canBuy} busy={busy} onBuy={onBuy} />
-      </div>
-      <p className="msg" role="alert">{msg}</p>
-      <p className="summary-note">1 รหัสพนักงาน สั่งซื้อได้เพียง 1 ครั้ง</p>
+      <button type="button" className="btn-primary" disabled={!canNext} onClick={onNext}>
+        ไปหน้าสรุปยอด
+      </button>
     </aside>
   )
 }
 
-export function MobileBuyBar({ size, price, canBuy, busy, onBuy, msg }) {
+export function ReviewItems({ items, stock, onQty, onRemove, onBack }) {
+  return (
+    <section className="panel" aria-labelledby="review-title">
+      <div className="review-head">
+        <button type="button" className="btn-back" onClick={onBack}>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          เลือกเพิ่ม
+        </button>
+        <h2 id="review-title">สรุปยอดคำสั่งซื้อ</h2>
+      </div>
+      {items.length === 0 ? (
+        <p className="empty">ไม่มีสินค้าในรายการ กด “เลือกเพิ่ม” เพื่อเลือกไซส์</p>
+      ) : (
+        <ul className="review-list">
+          {items.map((it) => (
+            <li key={it.size} className="review-item">
+              <Thumb />
+              <div className="review-info">
+                <b>NISSEI 40th Jacket</b>
+                <span>ไซส์ {it.size} · {baht(it.price)}/ตัว</span>
+                <span className="review-left">เหลือในสต๊อก {stock[it.size]?.remaining ?? 0} ตัว</span>
+              </div>
+              <div className="review-actions">
+                <b className="review-line">{baht(it.price * it.qty)}</b>
+                <div className="review-ctrl">
+                  <QtyStepper label={`ไซส์ ${it.size}`} value={it.qty} max={stock[it.size]?.remaining ?? 0} onChange={(v) => onQty(it.size, v)} />
+                  <button type="button" className="btn-remove" aria-label={`ลบไซส์ ${it.size}`} onClick={() => onRemove(it.size)}>
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
+export function TotalCard({ items, count, sum, canBuy, busy, onBuy, msg }) {
+  return (
+    <aside className="summary" aria-labelledby="total-title">
+      <h2 id="total-title">ยอดชำระ</h2>
+      <ul className="mini-cart">
+        {items.map((it) => (
+          <li key={it.size}>
+            <span>ไซส์ {it.size} × {it.qty}</span>
+            <b>{baht(it.price * it.qty)}</b>
+          </li>
+        ))}
+      </ul>
+      <div className="summary-total">
+        <span>รวม {count} ตัว</span>
+        <b>{baht(sum)}</b>
+      </div>
+      <button type="button" className="btn-primary" disabled={!canBuy} onClick={onBuy}>
+        {busy ? 'กำลังสั่งซื้อ...' : 'ยืนยันสั่งซื้อ'}
+      </button>
+      <p className="msg" role="alert">{msg}</p>
+    </aside>
+  )
+}
+
+export function MobileBar({ count, sum, label, disabled, onClick, msg }) {
   return (
     <div className="buybar">
       {msg && <p className="buybar-msg" role="alert">{msg}</p>}
       <div className="buybar-row">
         <div className="buybar-info">
-          <small>{size ? `ไซส์ ${size}` : 'ยังไม่ได้เลือกไซส์'}</small>
-          <b>{baht(price)}</b>
+          <small>{count ? `${count} ตัว` : 'ยังไม่ได้เลือก'}</small>
+          <b>{baht(sum)}</b>
         </div>
-        <BuyButton canBuy={canBuy} busy={busy} onBuy={onBuy} />
+        <button type="button" className="btn-primary" disabled={disabled} onClick={onClick}>
+          {label}
+        </button>
       </div>
     </div>
   )

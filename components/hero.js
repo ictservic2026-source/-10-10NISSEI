@@ -49,7 +49,7 @@ export default function Hero({ open, seconds, total, left, price }) {
         <p className="hero-lead">
           แจ็คเก็ตที่ระลึกครบรอบ 40 ปี สำหรับพนักงาน NISSEI
           <br />
-          1 รหัสพนักงาน สั่งซื้อได้ 1 ตัว
+          สั่งซื้อได้หลายตัว หลายไซส์ ในครั้งเดียว
         </p>
 
         {!open && <Countdown seconds={seconds} />}
